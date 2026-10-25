@@ -2,36 +2,37 @@
 
 A research-stage Civilization VI multiplayer mod intended to protect unfinished research and religion decisions from automatic turn timeout.
 
-> **Status: experimental diagnostic prototype.** This repository does **not** yet implement a replacement dynamic turn timer or protect players from timeout. Do not use it as a working timer mod.
+> **Status: experimental read-only diagnostics.** This repository does **not** implement a replacement dynamic timer or protect anyone from timeout yet.
 
 ## Intended behavior
 
-The future timer should follow Civilization VI's dynamic turn duration as closely as the game's supported APIs permit. When time expires, a player with an *available and pending* technology, civic, pantheon, religion-founding or belief-selection decision should retain their turn. Once all protected decisions are resolved, the timer should request completion of that player's turn if the multiplayer API supports it. Players may still end their turns manually.
+The future timer should follow Civilization VI's dynamic turn duration as closely as its supported APIs permit. When time expires, a player with an *available and pending* technology, civic, pantheon, religion-founding or belief-selection decision should retain their turn. Once all protected decisions are resolved, the timer should request completion of only that player's turn, if the multiplayer API supports it. Players may still finish turns manually.
 
-The mod must not make choices for the player, prevent a turn when no decision is available, or hold every player because another player has an outstanding choice.
+The mod must not make choices for the player, prevent a turn when no decision is actionable, or hold every player because another player has an outstanding choice.
 
 ## Current prototype
 
-The included UI-only diagnostic mod prints observable local-player state and the availability of candidate Lua API methods. It deliberately **does not** change turn timers or call any end-turn operations. Its purpose is to establish the actual capabilities of the installed Civ VI version and available DLC.
+The UI-only module records local-player research/civic identifiers, eligible-option probes and religion identifiers. It deliberately **does not** change turn timers or call end-turn actions. Numeric IDs and research availability counts are diagnostic observations, not verified proof of a mandatory pending choice.
 
-### Install for manual investigation
+### Manual install and test
 
-1. Copy the `Civ6SmartTurnTimer` directory (containing `Civ6SmartTurnTimer.modinfo` and `UI`) into your Civilization VI `Mods` directory.
-2. Enable **Civ6SmartTurnTimer (Diagnostics)** in Additional Content.
-3. Start a disposable single-player session before attempting multiplayer tests.
-4. Inspect the game's Lua logs for `[Civ6SmartTurnTimer]` messages. Enable Lua logging in your game configuration if necessary.
-5. Check the [validation plan](docs/VALIDATION.md) and record observed behavior; do not assume the API supports multiplayer interception because a Lua method exists.
+1. Download the currently developing feature branch and copy the mod folder (containing `Civ6SmartTurnTimer.modinfo` and `UI`) into your Civilization VI `Mods` directory.
+2. Enable **Civ6SmartTurnTimer (Diagnostics)** under Additional Content.
+3. Start a disposable single-player session.
+4. Inspect `Lua.log` for `[Civ6SmartTurnTimer]` messages. Depending on the installation, the log is under `%LOCALAPPDATA%\Firaxis Games\Sid Meier's Civilization VI\Logs`.
+5. Run the [research and religion tests](docs/STATE_PROBES.md) and compare actual in-game dialogs against the logs.
 
-Installation paths and logging options can differ between Epic/Steam installations and Civ VI versions. Test compatibility rather than assuming cross-platform synchronization.
+For changes to `.modinfo`, fully restart the game. Scripts and UI files may sometimes be hot-reloaded in a development setup, but do not rely on that for baseline tests.
 
-## Research constraints
+## Limitations
 
-- The built-in Dynamic Turn Timer's calculated time and automatic completion path have **not** been verified as script-accessible.
-- Safe per-player multiplayer turn completion has **not** been proven.
-- Pantheon, religion founding and apostle-related belief selection may use distinct UI/gameplay paths; none has been validated.
-- The diagnostic mod must not be treated as evidence that the requested behavior works.
+- The built-in Dynamic Turn Timer's calculated duration and automatic completion path are not verified as script-accessible.
+- Safe per-player multiplayer turn completion is not proven.
+- Pending pantheon, religion founding and apostle belief choices are **not yet detected**.
+- Local research/civic availability probes require validation across game builds and DLC.
+- Epic/Steam compatibility and synchronization have not been tested.
 
-See [technical investigation](docs/FEASIBILITY.md) and [manual validation matrix](docs/VALIDATION.md).
+See [technical investigation](docs/FEASIBILITY.md), [state probes](docs/STATE_PROBES.md) and [validation matrix](docs/VALIDATION.md).
 
 ## License
 
