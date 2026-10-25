@@ -106,8 +106,6 @@ local function snapshot(reason)
   if summary ~= lastSnapshot then
     log("Snapshot (" .. tostring(reason or "event") .. "): " .. summary)
     lastSnapshot = summary
-  else
-    log("Snapshot unchanged (" .. tostring(reason or "event") .. ")")
   end
 
   -- A numeric current research value alone does not prove that the choice is

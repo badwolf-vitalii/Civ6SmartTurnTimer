@@ -35,3 +35,9 @@ Keep the original time limit setting unchanged. The diagnostic mod cannot preven
 ## Validation requirement
 
 A protected-choice detector can only become a turn-blocking condition after its output is compared with the UI across positive and negative tests. Fail open when state cannot be established (or provide an explicit safe fallback) rather than creating an unrecoverable multiplayer turn.
+
+## Steam manual test: 2026-10-25
+
+The third supplied Lua log confirms the state probe is loaded and event handlers are registered. Local player 0: current tech `-1`, 5 researchable of 77 checked; current civic `0`, 1 progressable of 61 checked; pantheon `-1`, founded religion `-1`. This is **not yet** a verified mandatory-choice detection result: the corresponding UI prompts were not captured.
+
+The log contains repeated `CivicChanged` events without an observed change in snapshot. Suppress unchanged snapshots to avoid high-volume logging. The log also shows an earlier diagnostic script version running before the new probe, likely due to same-session reload; use a fresh process for a controlled baseline when necessary.
