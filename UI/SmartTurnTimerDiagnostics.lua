@@ -25,6 +25,7 @@ local function invoke(target, name, ...)
 end
 
 local function countAvailable(target, methodName, infoCollection, idField)
+  -- Enumerating GameInfo tables can differ by build; isolate probing failures.
   if target == nil or infoCollection == nil then
     return "unknown", "missing object or game data"
   end
@@ -32,7 +33,11 @@ local function countAvailable(target, methodName, infoCollection, idField)
   local count = 0
   local checked = 0
   local first = nil
-  for row in infoCollection() do
+  local iteratorOK, iterator = pcall(function() return infoCollection() end)
+  if not iteratorOK then
+    return "unknown", "cannot enumerate game data: " .. tostring(iterator)
+  end
+  for row in iterator do
     local id = row[idField]
     if type(id) == "number" then
       local allowed, errorMessage = invoke(target, methodName, id)
