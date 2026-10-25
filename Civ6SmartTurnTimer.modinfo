@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="4f40595b-a61e-4e46-9212-e6d9d837bafd" version="1">
+  <Properties>
+    <Name>Civ6SmartTurnTimer (Diagnostics)</Name>
+    <Description>Experimental, read-only Lua diagnostics for research into smart multiplayer turn timers. Does not modify timer behavior.</Description>
+    <Teaser>Research prototype; no turn timer behavior yet.</Teaser>
+    <Authors>Bad Wolf</Authors>
+    <CompatibleVersions>1.0,2.0</CompatibleVersions>
+  </Properties>
+  <InGameActions>
+    <AddUserInterfaces id="Civ6SmartTurnTimerDiagnostics">
+      <Properties>
+        <Context>InGame</Context>
+      </Properties>
+      <File>UI/SmartTurnTimerDiagnostics.lua</File>
+    </AddUserInterfaces>
+  </InGameActions>
+  <Files>
+    <File>UI/SmartTurnTimerDiagnostics.lua</File>
+  </Files>
+</Mod>
