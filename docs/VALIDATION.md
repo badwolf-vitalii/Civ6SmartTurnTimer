@@ -1,6 +1,6 @@
 # Manual validation matrix
 
-Record the Civ VI version/build, Epic or Steam distribution, enabled DLC, mod list, player count, mode and Lua log excerpt for each test. Start in a disposable single-player game.
+Record the Civ VI version/build, Steam or Epic distribution, enabled DLC, mod list, player count, mode and Lua log excerpt for each test. Start in a disposable single-player game.
 
 | Scenario | Expected future behavior | Current prototype |
 | --- | --- | --- |
@@ -16,15 +16,18 @@ Record the Civ VI version/build, Epic or Steam distribution, enabled DLC, mod li
 | Player clicks End Turn before timeout | Preserve normal manual behavior | No change to timer |
 | Two players, only one with a pending selection | Do not block unrelated player | Not tested |
 | Multiplayer reconnection / host migration | No timer deadlock or desync | Not tested |
-| Epic/Steam multiplayer and mod matching | Same mod/version loaded and stable | Not tested |
+| Steam/Epic multiplayer and mod matching | Same mod/version loaded and stable | Not tested |
 
 ## Diagnostic smoke test
 
 1. Enable the mod and enter a single-player match.
-2. Look for `[Civ6SmartTurnTimer] Read-only diagnostics loaded` in the Lua logs.
-3. Advance one turn, verify the local-player-turn event produces a new snapshot if the event is supported.
-4. Capture warnings and load errors; inspect the actual game-side context-registration syntax if the script did not load.
-5. Confirm that enabling the mod **does not alter** a game's turn timer.
-6. Only after single-player smoke tests succeed, repeat in a controlled multiplayer test match with identical mod and DLC sets.
+2. Look for `[Civ6SmartTurnTimer] Read-only diagnostics loaded` in `Lua.log`.
+3. Advance one turn; verify the local-player-turn event produces a snapshot if the event is supported.
+4. If the marker is absent, inspect `Modding.log` and `Database.log`, and confirm that the mod is enabled in the actual game configuration.
+5. The UI context must be declared through `UI/SmartTurnTimerDiagnostics.xml`; the matching Lua file is loaded by the game as the context script. The modinfo imports both files.
+6. Confirm that enabling the mod **does not alter** a game's turn timer.
+7. Only after single-player smoke tests succeed, repeat in a controlled multiplayer test match with identical mod and DLC sets.
+
+The original test log contained no mod-specific marker and many unrelated-looking repeating `MainMenu.lua:1373` failures. The latter cannot be attributed to this mod without isolation testing.
 
 Do not tick off protected-choice behavior until a separate, functional implementation exists.
